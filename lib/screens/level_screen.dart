@@ -41,13 +41,17 @@ class _LevelScreenState extends State<LevelScreen> {
                   crossAxisSpacing: 10,
                 ),
                 itemBuilder: (context, index) => BuildNiveau(
-                  onTap: () => Get.to(() => PageMatiere(
+                  onTap: () => Get.to(
+                    () => PageMatiere(
                       url: widget.level.name +
                           '-' +
-                          levelController.listMatiere[index].name)),
+                          levelController.listMatiere[index].name,
+                    ),
+                  ),
                   niveau: Niveau(
-                      name: levelController.listMatiere[index].name,
-                      nbEpreuves: levelController.listMatiere[index].epreuves),
+                    name: levelController.listMatiere[index].name,
+                    nbEpreuves: levelController.listMatiere[index].epreuves,
+                  ),
                 ),
               ),
       ),

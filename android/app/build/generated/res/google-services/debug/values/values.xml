@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">763703962589-69fo09agrmdk5qnrm7jojnnr3pg0tghd.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">763703962589</string>
+    <string name="google_api_key" translatable="false">AIzaSyBW6GY-b1NhKyPZRq8WvXk3oxL87mIz5JQ</string>
+    <string name="google_app_id" translatable="false">1:763703962589:android:97df3d9476960c2b5da434</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyBW6GY-b1NhKyPZRq8WvXk3oxL87mIz5JQ</string>
+    <string name="google_storage_bucket" translatable="false">educamer-17988.appspot.com</string>
+    <string name="project_id" translatable="false">educamer-17988</string>
+</resources>

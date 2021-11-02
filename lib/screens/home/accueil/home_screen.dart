@@ -1,9 +1,11 @@
+import 'package:educamer/ad_state.dart';
 import 'package:educamer/controllers/home_screen_controller.dart';
 import 'package:educamer/models/niveau.dart';
 import 'package:educamer/screens/level_screen.dart';
 import 'package:educamer/widgets/build_niveau.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key key}) : super(key: key);
@@ -15,6 +17,25 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HomeScreenController homeScreenController =
       Get.put(HomeScreenController());
+  final AdState adState = Get.find();
+
+  BannerAd bannerAd;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    adState.initialization.then((value) {
+      setState(() {
+        bannerAd = BannerAd(
+          adUnitId: adState.bannerId,
+          size: AdSize.banner,
+          listener: adState.adListener,
+          request: AdRequest(),
+        )..load();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScrollView(
@@ -22,6 +43,11 @@ class _HomeScreenState extends State<HomeScreen> {
         SliverList(
           delegate: SliverChildListDelegate(
             [
+              bannerAd == null
+                  ? SizedBox()
+                  : Container(
+                      child: AdWidget(ad: bannerAd),
+                    ),
               Card(
                 margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                 child: Container(

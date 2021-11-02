@@ -1,6 +1,8 @@
 import 'package:educamer/controllers/test_controller.dart';
+import 'package:educamer/screens/test_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class PageMatiere extends StatefulWidget {
   final String url;
@@ -46,6 +48,10 @@ class _PageMatiereState extends State<PageMatiere> {
                       itemBuilder: (context, index) => Card(
                         child: Container(
                           child: ListTile(
+                            onTap: () => Get.to(() => ViewTestScreen(
+                                  test: testController.testList[index],
+                                  id: widget.url,
+                                )),
                             title: Text(
                               testController.testList[index].schoolname +
                                   '  ' +
@@ -59,12 +65,28 @@ class _PageMatiereState extends State<PageMatiere> {
                               direction: Axis.vertical,
                               children: [
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    if (await canLaunch(testController
+                                        .testList[index].epreuve)) {
+                                      await launch(testController
+                                          .testList[index].epreuve);
+                                    } else {
+                                      Get.snackbar(
+                                          'Messae', 'Epreuve non disponible');
+                                    }
+                                  },
                                   icon:
                                       Icon(Icons.download, color: Colors.blue),
                                 ),
                                 IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Get.to(
+                                      () => ViewTestScreen(
+                                        test: testController.testList[index],
+                                        id: widget.url,
+                                      ),
+                                    );
+                                  },
                                   icon: Icon(Icons.visibility,
                                       color: Colors.blue),
                                 ),
