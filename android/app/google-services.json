@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "763703962589",
+    "project_id": "educamer-17988",
+    "storage_bucket": "educamer-17988.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:763703962589:android:97df3d9476960c2b5da434",
+        "android_client_info": {
+          "package_name": "com.davissolutions.educamer.educamer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "763703962589-69fo09agrmdk5qnrm7jojnnr3pg0tghd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBW6GY-b1NhKyPZRq8WvXk3oxL87mIz5JQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "763703962589-69fo09agrmdk5qnrm7jojnnr3pg0tghd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
