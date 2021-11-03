@@ -1,4 +1,4 @@
-import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+//import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:educamer/models/test.dart';
 
 import 'package:flutter/material.dart';
@@ -17,16 +17,16 @@ class ViewTestScreen extends StatefulWidget {
 
 class _ViewTestScreenState extends State<ViewTestScreen> {
   bool isLoading = true;
-  PDFDocument pdfDocument;
+ // PDFDocument pdfDocument;
 
   @override
   void initState() {
     super.initState();
-    loadDocument();
+   // loadDocument();
     print(widget.test.epreuve);
   }
 
-  loadDocument() async {
+ /*  loadDocument() async {
     pdfDocument = await PDFDocument.fromURL(
       widget.test.epreuve,
       cacheManager: CacheManager(
@@ -40,7 +40,7 @@ class _ViewTestScreenState extends State<ViewTestScreen> {
     setState(() {
       isLoading = false;
     });
-  }
+  } */
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,7 @@ class _ViewTestScreenState extends State<ViewTestScreen> {
             )
           : Column(
               children: [
-                Expanded(
+                /* Expanded(
                   child: PDFViewer(
                     document: pdfDocument,
                     zoomSteps: 10,
@@ -122,7 +122,7 @@ class _ViewTestScreenState extends State<ViewTestScreen> {
                       );
                     },
                   ),
-                ),
+                ), */
               ],
             ),
     );

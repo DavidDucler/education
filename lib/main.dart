@@ -8,9 +8,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   final initFuture = MobileAds.instance.initialize();
   Get.lazyPut(() => AdState(initialization: initFuture));
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 

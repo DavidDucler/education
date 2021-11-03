@@ -17,23 +17,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HomeScreenController homeScreenController =
       Get.put(HomeScreenController());
-  final AdState adState = Get.find();
-
-  BannerAd bannerAd;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    adState.initialization.then((value) {
-      setState(() {
-        bannerAd = BannerAd(
-          adUnitId: adState.bannerId,
-          size: AdSize.banner,
-          listener: adState.adListener,
-          request: AdRequest(),
-        )..load();
-      });
-    });
   }
 
   @override
@@ -43,11 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
         SliverList(
           delegate: SliverChildListDelegate(
             [
-              bannerAd == null
-                  ? SizedBox()
-                  : Container(
-                      child: AdWidget(ad: bannerAd),
-                    ),
               Card(
                 margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                 child: Container(
@@ -87,6 +68,20 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
+               Obx(
+                () => homeScreenController.isLoaded.isTrue
+                    ? Center(
+                        child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : Container(
+                        height: 100,
+                        child: AdWidget(ad: homeScreenController.bannerAd),
+                      ),
+              ), 
               Container(
                 margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
                 child: Text(
@@ -119,20 +114,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 10,
                   crossAxisSpacing: 10,
-                  children: List.generate(
-                    homeScreenController.listLevel.length,
-                    (index) => BuildNiveau(
-                      onTap: () {
-                        Get.to(() => LevelScreen(
-                            level: homeScreenController.listLevel[index]));
-                      },
-                      niveau: Niveau(
-                        name: homeScreenController.listLevel[index].name,
-                        nbEpreuves:
-                            homeScreenController.listLevel[index].nbEpreuves,
-                      ),
-                    ),
-                  ),
+                  children: List.generate(homeScreenController.listLevel.length,
+                      (index) {
+                    if (homeScreenController.listLevel[index] is Niveau) {
+                      return BuildNiveau(
+                        onTap: () {
+                          Get.to(() => LevelScreen(
+                              level: (homeScreenController.listLevel[index]
+                                  as Niveau)));
+                        },
+                        niveau: Niveau(
+                          name:
+                              (homeScreenController.listLevel[index] as Niveau)
+                                  .name,
+                          nbEpreuves:
+                              (homeScreenController.listLevel[index] as Niveau)
+                                  .nbEpreuves,
+                        ),
+                      );
+                    } else {
+                      return Container(
+                        margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                        height: 200,
+                        child: AdWidget(
+                          key: Key(
+                            homeScreenController.listLevel[index].toString(),
+                          ),
+                          ad: (homeScreenController.listLevel[index]
+                              as BannerAd),
+                        ),
+                      );
+                    }
+                  }),
                 ),
         ),
       ],
