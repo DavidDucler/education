@@ -47,9 +47,9 @@ class HomeScreenController extends GetxController {
     loading.value = true;
     try {
       listLevel = List.from(await _allLevelService.allLevels());
-      for (int i = listLevel.length - 2; i >= 1; i -= 8) {
+      /* for (int i = listLevel.length - 2; i >= 1; i -= 8) {
         listLevel.insert(i, bannerAd);
-      }
+      } */
       // listLevelAds.value = List.from(listLevel.value);
       loading.value = false;
     } on FirebaseException catch (e) {

@@ -18,6 +18,8 @@ class _PageMatiereState extends State<PageMatiere> {
   void initState() {
     super.initState();
     testController.getAllTest(collectionName: widget.url);
+    //testController.createIntertitialAd();
+    //testController.createRewardedAd();
   }
 
   @override
@@ -47,50 +49,64 @@ class _PageMatiereState extends State<PageMatiere> {
                       itemCount: testController.testList.length,
                       itemBuilder: (context, index) => Card(
                         child: Container(
-                          child: ListTile(
-                            onTap: () => Get.to(() => ViewTestScreen(
-                                  test: testController.testList[index],
-                                  id: widget.url,
-                                )),
-                            title: Text(
-                              testController.testList[index].schoolname +
-                                  '  ' +
-                                  testController.testList[index].sequence,
-                            ),
-                            subtitle: Text(
-                              'Annee Scolaire: ' +
-                                  testController.testList[index].annee,
-                            ),
-                            trailing: Wrap(
-                              direction: Axis.vertical,
-                              children: [
-                                IconButton(
-                                  onPressed: () async {
-                                    if (await canLaunch(testController
-                                        .testList[index].epreuve)) {
-                                      await launch(testController
-                                          .testList[index].epreuve);
-                                    } else {
-                                      Get.snackbar(
-                                          'Messae', 'Epreuve non disponible');
-                                    }
-                                  },
-                                  icon:
-                                      Icon(Icons.download, color: Colors.blue),
-                                ),
-                                IconButton(
-                                  onPressed: () {
+                          child: Obx(
+                            () => ListTile(
+                              onTap: () async {
+                                // testController.createIntertitialAd();
+                                //testController.createRewardedAd();
+                                await testController
+                                    .createRewardedLoad()
+                                    .then((value) {
+                                  if (testController.loadAd.isTrue) {
                                     Get.to(
                                       () => ViewTestScreen(
                                         test: testController.testList[index],
                                         id: widget.url,
                                       ),
                                     );
-                                  },
-                                  icon: Icon(Icons.visibility,
-                                      color: Colors.blue),
-                                ),
-                              ],
+                                  }
+                                });
+                              },
+                              title: Text(
+                                testController.testList[index].schoolname +
+                                    '  ' +
+                                    testController.testList[index].sequence,
+                              ),
+                              subtitle: Text(
+                                'Annee Scolaire: ' +
+                                    testController.testList[index].annee,
+                              ),
+                              trailing: Wrap(
+                                direction: Axis.vertical,
+                                children: [
+                                  IconButton(
+                                    onPressed: () async {
+                                      if (await canLaunch(testController
+                                          .testList[index].epreuve)) {
+                                        await launch(testController
+                                            .testList[index].epreuve);
+                                      } else {
+                                        Get.snackbar(
+                                            'Messae', 'Epreuve non disponible');
+                                      }
+                                    },
+                                    icon: Icon(Icons.download,
+                                        color: Colors.green),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      Get.to(
+                                        () => ViewTestScreen(
+                                          test: testController.testList[index],
+                                          id: widget.url,
+                                        ),
+                                      );
+                                    },
+                                    icon: Icon(Icons.visibility,
+                                        color: Colors.green),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),

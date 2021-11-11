@@ -1,11 +1,10 @@
-import 'package:educamer/data/img.dart';
-import 'package:educamer/models/niveau.dart';
+import 'package:educamer/models/matiere.dart';
 import 'package:flutter/material.dart';
 
-class BuildNiveau extends StatelessWidget {
+class BuildMatiere extends StatelessWidget {
   final VoidCallback onTap;
-  final Niveau niveau;
-  const BuildNiveau({Key key, this.niveau, this.onTap}) : super(key: key);
+  final Matiere matiere;
+  const BuildMatiere({Key key, this.matiere, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,36 +14,23 @@ class BuildNiveau extends StatelessWidget {
         child: Container(
           height: 70,
           width: 70,
-          /* foregroundDecoration: BoxDecoration(
+          foregroundDecoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.cover,
               colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.7), BlendMode.dstOut),
-              image: AssetImage(
-                Img.get('tableau.jpg'),
-              ),
+                  Colors.black.withOpacity(0.1), BlendMode.dstATop),
+              image: NetworkImage(matiere.image),
             ),
-          ), */
-          //margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+          ),
           decoration: BoxDecoration(
-            /* image:
-                DecorationImage(image: AssetImage(Img.get('img_wizard_1.png'))), */
             color: Colors.white,
-            /* borderRadius: BorderRadius.all(
-              Radius.circular(15.0),
-            ) ,*/
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
-                Icons.class_,
-                size: 64,
-                color: Colors.white,
-              ),
               Text(
-                niveau.name,
+                matiere.name,
                 style: TextStyle(
                   color: Colors.green,
                   fontWeight: FontWeight.bold,
@@ -55,11 +41,16 @@ class BuildNiveau extends StatelessWidget {
                 radius: 20,
                 backgroundColor: Colors.black,
                 child: Text(
-                  niveau.nbEpreuves,
+                  matiere.epreuves,
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              Text('Epreuves'),
+              Text(
+                ' Epreuves',
+                style: TextStyle(
+                  color: Colors.black,
+                ),
+              ),
             ],
           ),
         ),

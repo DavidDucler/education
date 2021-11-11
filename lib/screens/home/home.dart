@@ -1,4 +1,5 @@
 import 'package:educamer/screens/home/accueil/home_screen.dart';
+import 'package:educamer/screens/home/teacher/home_teacher.dart';
 import 'package:flutter/material.dart';
 
 import 'about/about.dart';
@@ -9,6 +10,10 @@ class HomePage extends StatefulWidget {
     BottomNavigationBarItem(
       icon: Icon(Icons.home),
       title: Text('Accueil'),
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.person),
+      title: Text('Teachers'),
     ),
     BottomNavigationBarItem(
       icon: Icon(Icons.info_rounded),
@@ -23,6 +28,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<Widget> homeList = [
     HomeScreen(),
+    TeacherHome(),
     AboutPage(),
   ];
   int currentIndex = 0;
@@ -30,11 +36,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      //backgroundColor: Colors.white,
       body: homeList[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.blue,
-        selectedItemColor: Colors.white,
+        backgroundColor: Colors.black,
+        selectedItemColor: Colors.green,
         unselectedItemColor: Colors.grey[400],
         currentIndex: currentIndex,
         onTap: (index) {

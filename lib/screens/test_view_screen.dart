@@ -1,8 +1,13 @@
 //import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
+import 'dart:async';
+
+import 'package:educamer/controllers/test_controller.dart';
+import 'package:educamer/controllers/test_view_controller.dart';
 import 'package:educamer/models/test.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ViewTestScreen extends StatefulWidget {
@@ -16,17 +21,35 @@ class ViewTestScreen extends StatefulWidget {
 }
 
 class _ViewTestScreenState extends State<ViewTestScreen> {
+  final TestViewController testViewController = Get.put(TestViewController());
+  final TestController testController = Get.find();
   bool isLoading = true;
- // PDFDocument pdfDocument;
 
   @override
   void initState() {
+    //testController.interstitialAd.show();
+    /* testController.loadAd.isTrue
+        ? testController.rewardedAd.show(
+            onUserEarnedReward: (RewardedAd ad, RewardItem rewardedItem) {
+            print('${rewardedItem.amount}');
+            print('${rewardedItem.type}');
+          })
+        : print('load failed'); */
+
     super.initState();
-   // loadDocument();
-    print(widget.test.epreuve);
   }
 
- /*  loadDocument() async {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  /*  loadDocument() async {
     pdfDocument = await PDFDocument.fromURL(
       widget.test.epreuve,
       cacheManager: CacheManager(

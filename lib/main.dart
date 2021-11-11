@@ -22,7 +22,7 @@ class MyApp extends GetWidget<AdState> {
       defaultTransition: Transition.fadeIn,
       transitionDuration: Duration(seconds: 1),
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.green,
         textTheme: GoogleFonts.nunitoTextTheme(),
       ),
       home: SplashScreen(),
