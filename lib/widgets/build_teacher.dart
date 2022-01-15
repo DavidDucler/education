@@ -1,10 +1,10 @@
-import 'package:educamer/models/matiere.dart';
+import 'package:educamer/models/teachermodel.dart';
 import 'package:flutter/material.dart';
 
-class BuildMatiere extends StatelessWidget {
+class BuildTeacher extends StatelessWidget {
   final VoidCallback onTap;
-  final Matiere matiere;
-  const BuildMatiere({Key key, this.matiere, this.onTap}) : super(key: key);
+  final TeacherModel teacher;
+  const BuildTeacher({Key key, this.teacher, this.onTap}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -14,14 +14,6 @@ class BuildMatiere extends StatelessWidget {
         child: Container(
           height: 70,
           width: 70,
-          /* foregroundDecoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.1), BlendMode.dstATop),
-              image: NetworkImage(matiere.image),
-            ),
-          ), */
           decoration: BoxDecoration(
             color: Colors.white,
           ),
@@ -30,30 +22,29 @@ class BuildMatiere extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                matiere.name,
+                teacher.testname,
+                textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.green,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
                 ),
               ),
-              CustomPaint(
-                painter: MyTextPainter(),
-              ),
               CircleAvatar(
                 radius: 20,
                 backgroundColor: Colors.black,
                 child: Text(
-                  matiere.epreuves,
+                  teacher.teacherNumber,
                   style: TextStyle(
                     color: Colors.white,
                   ),
                 ),
               ),
               Text(
-                ' Epreuves',
+                'Enseignants',
                 style: TextStyle(
                   color: Colors.black,
+                  letterSpacing: 1.0,
                 ),
               ),
             ],
@@ -62,18 +53,4 @@ class BuildMatiere extends StatelessWidget {
       ),
     );
   }
-}
-
-class  MyTextPainter extends CustomPainter {
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    
-  }
-
-  @override
-  bool shouldRepaint(MyTextPainter oldDelegate) => false;
-
-  @override
-  bool shouldRebuildSemantics(MyTextPainter oldDelegate) => false;
 }

@@ -18,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final HomeScreenController homeScreenController =
       Get.put(HomeScreenController());
+  bool logIn = true;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -25,13 +26,41 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(slivers: [
-      SliverList(
-        delegate: SliverChildListDelegate(
-          [
-            Card(
-              margin: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
-              child: Container(
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          title: Text(
+            'EDUCAMER',
+            style: TextStyle(
+              color: Colors.lightGreen,
+            ),
+          ),
+          pinned: true,
+          floating: true,
+          forceElevated: true,
+          backgroundColor: Colors.black,
+          actions: [
+            Row(
+              children: [
+                Text('Session'),
+                Switch(
+                  value: logIn,
+                  onChanged: (value) {
+                    setState(() {
+                      logIn = value;
+                    });
+                  },
+                  activeColor: Colors.green,
+                  inactiveThumbColor: Colors.white,
+                )
+              ],
+            )
+          ],
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              Container(
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -58,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     Text(
-                      'c\'est gratuit et tout se fait en seul clic',
+                      'c\'est gratuit et tout se fait en quelques clics.',
                       style: TextStyle(
                         fontSize: 15,
                         color: Colors.black,
@@ -67,76 +96,117 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-            ),
-            Obx(
-              () => homeScreenController.isLoaded.isTrue
-                  ? Center(
-                      child: SizedBox(
-                        width: 30,
-                        height: 30,
-                        child: CircularProgressIndicator(),
-                      ),
-                    )
-                  : Container(
-                      height: 100,
-                      child: AdWidget(ad: homeScreenController.bannerAd),
+              ExpansionTile(
+                title: Text(
+                  'Quelques conseils pour reussir son examen!!!',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                children: [
+                  ListTile(
+                    title: Text(
+                      'Essayer : rester calme et de prenez des inspirations profondes ou respirez profondément.',
                     ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-              child: Text(
-                'Classes Disponibles',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Lisez tout l’examen avant de commencer.',
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Gérer votre temps.',
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Passez à la question suivante si vous bloquez sur une question.',
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Lisez les questions attentivement et assurez-vous que vous répondez à chaque question correctement.',
+                    ),
+                  ),
+                  ListTile(
+                    title: Text(
+                      'Vérifiez vos réponses surtout si vous avez fini tôt.',
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Obx(
+                () => homeScreenController.isLoaded.isTrue
+                    ? Center(
+                        child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : Container(
+                        height: 100,
+                        child: AdWidget(ad: homeScreenController.bannerAd),
+                      ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                child: Text(
+                  'Classes Disponibles',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      Obx(
-        () => homeScreenController.loading.isTrue
-            ? SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    Center(
-                      child: SizedBox(
-                        height: 30,
-                        width: 30,
-                        child: CircularProgressIndicator(),
+        Obx(
+          () => homeScreenController.loading.isTrue
+              ? SliverList(
+                  delegate: SliverChildListDelegate(
+                    [
+                      Center(
+                        child: SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
+                )
+              : SliverStaggeredGrid.countBuilder(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 0,
+                  crossAxisSpacing: 0,
+                  staggeredTileBuilder: (int index) => StaggeredTile.count(
+                    1,
+                    index.isEven ? 2 : 1,
+                  ),
+                  itemBuilder: (context, int index) {
+                    return BuildNiveau(
+                      onTap: () {
+                        homeScreenController.createIntertitialAd();
+                        Get.to(() => LevelScreen(
+                            level: homeScreenController.listLevel[index]));
+                      },
+                      niveau: Niveau(
+                        name: homeScreenController.listLevel[index].name,
+                        nbEpreuves:
+                            homeScreenController.listLevel[index].nbEpreuves,
+                      ),
+                    );
+                  },
+                  itemCount: homeScreenController.listLevel.length,
                 ),
-              )
-            : SliverStaggeredGrid.countBuilder(
-                crossAxisCount: 2,
-                mainAxisSpacing: 0,
-                crossAxisSpacing: 0,
-                staggeredTileBuilder: (int index) => StaggeredTile.count(
-                  1,
-                  index.isEven ? 2 : 1,
-                ),
-                itemBuilder: (context, int index) {
-                  return BuildNiveau(
-                    onTap: () {
-                      Get.to(() => LevelScreen(
-                          level: (homeScreenController.listLevel[index]
-                              as Niveau)));
-                    },
-                    niveau: Niveau(
-                      name: (homeScreenController.listLevel[index] as Niveau)
-                          .name,
-                      nbEpreuves:
-                          (homeScreenController.listLevel[index] as Niveau)
-                              .nbEpreuves,
-                    ),
-                  );
-                },
-                itemCount: homeScreenController.listLevel.length,
-              ),
-      )
-    ]);
+        )
+      ],
+    );
   }
 }

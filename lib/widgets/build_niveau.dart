@@ -12,44 +12,49 @@ class BuildNiveau extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Card(
+        elevation: 10.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(15.0),
+          ),
+        ),
+        shadowColor: Colors.black12,
         child: Container(
           height: 70,
           width: 70,
-          /* foregroundDecoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.7), BlendMode.dstOut),
-              image: AssetImage(
-                Img.get('tableau.jpg'),
-              ),
-            ),
-          ), */
-          //margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
           decoration: BoxDecoration(
-            /* image:
-                DecorationImage(image: AssetImage(Img.get('img_wizard_1.png'))), */
             color: Colors.white,
-            /* borderRadius: BorderRadius.all(
+            borderRadius: BorderRadius.all(
               Radius.circular(15.0),
-            ) ,*/
+            ),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(
-                Icons.class_,
-                size: 64,
-                color: Colors.white,
-              ),
-              Text(
-                niveau.name,
-                style: TextStyle(
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Classe:',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    niveau.name,
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
               ),
               CircleAvatar(
                 radius: 20,
@@ -59,7 +64,13 @@ class BuildNiveau extends StatelessWidget {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              Text('Epreuves'),
+              Text(
+                'Epreuves et Corriges',
+                style: TextStyle(
+                  color: Colors.black87,
+                  letterSpacing: 1.0,
+                ),
+              ),
             ],
           ),
         ),

@@ -1,7 +1,7 @@
 import 'package:educamer/controllers/test_controller.dart';
-import 'package:educamer/screens/test_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class PageMatiere extends StatefulWidget {
@@ -13,13 +13,23 @@ class PageMatiere extends StatefulWidget {
 }
 
 class _PageMatiereState extends State<PageMatiere> {
-  final TestController testController = Get.put(TestController());
+  final TestController testController = Get.find();
+
   @override
   void initState() {
     super.initState();
     testController.getAllTest(collectionName: widget.url);
+    showRewardedAdd();
     //testController.createIntertitialAd();
     //testController.createRewardedAd();
+  }
+
+  void showRewardedAdd() {
+    testController.rewardedAd?.show(
+        onUserEarnedReward: (RewardedAd ad, RewardItem rewardedItem) {
+      print('${rewardedItem.amount}');
+      print('${rewardedItem.type}');
+    });
   }
 
   @override
@@ -27,6 +37,7 @@ class _PageMatiereState extends State<PageMatiere> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.url),
+        elevation: 0,
       ),
       body: Obx(
         () => testController.loading.isTrue
@@ -52,20 +63,15 @@ class _PageMatiereState extends State<PageMatiere> {
                           child: Obx(
                             () => ListTile(
                               onTap: () async {
-                                // testController.createIntertitialAd();
-                                //testController.createRewardedAd();
-                                await testController
-                                    .createRewardedLoad()
-                                    .then((value) {
-                                  if (testController.loadAd.isTrue) {
-                                    Get.to(
-                                      () => ViewTestScreen(
-                                        test: testController.testList[index],
-                                        id: widget.url,
-                                      ),
-                                    );
-                                  }
-                                });
+                                if (await canLaunch(
+                                    testController.testList[index].corrige)) {
+                                  await launch(
+                                      testController.testList[index].corrige);
+                                  showRewardedAdd();
+                                } else {
+                                  Get.snackbar(
+                                      'Messagee', 'Epreuve non disponible');
+                                }
                               },
                               title: Text(
                                 testController.testList[index].schoolname +
@@ -82,27 +88,16 @@ class _PageMatiereState extends State<PageMatiere> {
                                   IconButton(
                                     onPressed: () async {
                                       if (await canLaunch(testController
-                                          .testList[index].epreuve)) {
+                                          .testList[index].corrige)) {
                                         await launch(testController
-                                            .testList[index].epreuve);
+                                            .testList[index].corrige);
+                                        showRewardedAdd();
                                       } else {
-                                        Get.snackbar(
-                                            'Messae', 'Epreuve non disponible');
+                                        Get.snackbar('Message',
+                                            'Epreuve non disponible');
                                       }
                                     },
                                     icon: Icon(Icons.download,
-                                        color: Colors.green),
-                                  ),
-                                  IconButton(
-                                    onPressed: () {
-                                      Get.to(
-                                        () => ViewTestScreen(
-                                          test: testController.testList[index],
-                                          id: widget.url,
-                                        ),
-                                      );
-                                    },
-                                    icon: Icon(Icons.visibility,
                                         color: Colors.green),
                                   ),
                                 ],

@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //backgroundColor: Colors.white,
+      backgroundColor: Colors.white,
       body: homeList[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: Colors.black,

@@ -4,34 +4,34 @@ import 'package:flutter/material.dart';
 class Dummy {
   //Wizard data -----------------------------------------
   static const List<String> wizard_title = [
-    "Ready to Travel",
-    "Pick the Ticket",
-    "Flight to Destination",
-    "Enjoy Holiday"
+    "Banques d'épreuves",
+    "Enseignants à domicile",
+    "Notification"
   ];
   static const List<String> wizard_brief = [
-    "Choose your destination, plan Your trip. Pick the best place for Your holiday",
-    "Select the day, pick Your ticket. We give you the best prices. We guarantee!",
-    "Safe and Comfort flight is our priority. Professional crew and services.",
-    "Enjoy your holiday, Don't forget to feel the moment and take a photo!",
+    // "Choose your destination, plan Your trip. Pick the best place for Your holiday",
+    "Retrouvez-sur Educamer les épreuves des plus collèges et lycées du cameroun",
+    "Vous avez des difficultés,desormais Sur Educamer vous disposez des enseignants qualifiés, faites votre choix",
+    "Profitez des notifactions instantanées",
   ];
   static const List<String> wizard_image = [
-    "img_wizard_1.png",
-    "img_wizard_2.png",
-    "img_wizard_3.png",
-    "img_wizard_4.png",
+    // "lottie_property.json",
+    "lottie_invoice.json",
+    "lottie_analytics.json",
+    "lottie_notification.json",
   ];
   static const List<String> wizard_background = [
-    "image_15.jpg",
+    // "image_15.jpg",
     "image_10.jpg",
     "image_3.jpg",
     "image_12.jpg"
   ];
+
   static const List<Color> wizard_color = [
-    Colors.red,
-    Colors.blueGrey,
-    Colors.purple,
-    Colors.orange,
+    // Colors.red,
+    Colors.green,
+    Colors.lightGreen,
+    Colors.greenAccent,
   ];
 
   //
