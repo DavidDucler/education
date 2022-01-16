@@ -22,34 +22,67 @@ class _TeacherHomeState extends State<TeacherHome> {
         elevation: 0,
         backgroundColor: Colors.black,
       ),
-      body: Obx(
-        () => allTeachersController.loading.isTrue
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : RefreshIndicator(
-                onRefresh: () => allTeachersController.getAllTeachers(),
-                child: GridView.builder(
-                  itemCount: allTeachersController.allTeachers.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 5,
-                    crossAxisSpacing: 5,
+      body: allTeachersController.obx(
+        (state) => RefreshIndicator(
+          onRefresh: () => allTeachersController.getAllTeachers(),
+          child: GridView.builder(
+            itemCount: state.length,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 5,
+              crossAxisSpacing: 5,
+            ),
+            itemBuilder: (context, index) => BuildTeacher(
+              teacher: state[index],
+              onTap: () {
+                Get.to(
+                  () => SingleTestTeacherPage(
+                      teacherModel: state[index],
                   ),
-                  itemBuilder: (context, index) => BuildTeacher(
-                    teacher: allTeachersController.allTeachers[index],
-                    onTap: () {
-                      Get.to(
-                        () => SingleTestTeacherPage(
-                          teacherModel:
-                              allTeachersController.allTeachers[index],
-                        ),
-                      );
-                    },
-                  ),
+                );
+              },
+            ),
+          ),
+        ),
+          onLoading: Center(
+          child: CircularProgressIndicator(),
+        ),
+        onEmpty: Center(
+          child: Text(
+            'Oups,Aucun enseignants',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        onError: (error) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                error,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFFD3C4A),
                 ),
               ),
+              IconButton(
+                onPressed: () => allTeachersController.getAllTeachers(),
+                icon: Icon(
+                  Icons.replay_outlined,
+                  color: Color(0xFF4ACF70),
+                  size: 48,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
+        
     );
   }
 }

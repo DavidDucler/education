@@ -40,7 +40,14 @@ class _LevelScreenState extends State<LevelScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.level.name),
+        title: Text(
+          widget.level.name,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Color(0xFF4ACF70),
         elevation: 0,
       ),
       body: Obx(

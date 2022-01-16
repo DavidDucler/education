@@ -1,17 +1,27 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:educamer/api/test_api.dart';
-import 'package:educamer/models/test.dart';
 
 class TestService extends TestApi {
   final FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
   @override
-  Future<List<Test>> getAllTest({String collectionName}) async {
-    List<Test> listTest = [];
+  Future<List<QueryDocumentSnapshot>> getInitialTestList(
+      {String collectionName,
+      int numberToLoadAtTime,
+      QueryDocumentSnapshot lastFetchDocument}) async {
     try {
-      await firebaseFirestore
+      QuerySnapshot querySnapshot = await firebaseFirestore
           .collection(collectionName)
+          .limit(numberToLoadAtTime)
           .get()
-          .then((querySnapshot) => {
+          .timeout(
+            Duration(seconds: 1),
+          );
+
+      /* .then((querySnapshot) => {
                 querySnapshot.docs.forEach((doc) => {
                       listTest.add(
                         Test.fromMap(
@@ -20,12 +30,47 @@ class TestService extends TestApi {
                       ),
                       print(doc.data()),
                     }),
-              });
-      return listTest;
-      // print(_listLevel.toString());
-    } on FirebaseException catch (e) {
+              }); */
+      return querySnapshot.docs;
+    } on TimeoutException catch (e) {
       print(e.message);
-      return listTest;
+      throw TestException(
+          message:
+              'Impossible de charger les epreuves,Verifier votre connection internet et Ressayez.');
+    } catch (e) {
+      print(e.toString());
+      throw TestException(
+          message:
+              'Une erreur est survenue,Verifier votre connection internet ou Ressayez plus tard.');
     }
   }
+
+  Future<List<QueryDocumentSnapshot>> getNextTestList(
+      {String collectionName,
+      int numberToLoadAtTime,
+      QueryDocumentSnapshot lastFetchDocument}) async {
+    try {
+      QuerySnapshot querySnapshot = await firebaseFirestore
+          .collection(collectionName)
+          .startAfterDocument(lastFetchDocument)
+          .limit(numberToLoadAtTime)
+          .get();
+      return querySnapshot.docs;
+    } on SocketException catch (e) {
+      print('pas de connection internet');
+      print(e.message);
+      throw TestException(message: 'Verifier votre connection internet');
+    } catch (e) {
+      print('pas de connection internet');
+      print(e.message);
+      throw TestException(message: e.toString());
+    }
+  }
+}
+
+class TestException implements Exception {
+  final String message;
+  TestException({
+    this.message = 'Une erreur est survenue',
+  });
 }

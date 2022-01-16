@@ -1,5 +1,5 @@
-import 'package:educamer/models/test.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 abstract class TestApi {
-  Future<List<Test>> getAllTest();
+  Future<List<QueryDocumentSnapshot>> getInitialTestList();
 }

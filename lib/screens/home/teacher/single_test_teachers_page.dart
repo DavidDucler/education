@@ -18,11 +18,21 @@ class SingleTestTeacherPage extends StatefulWidget {
 class _SingleTestTeacherPageState extends State<SingleTestTeacherPage> {
   final SingleTestTeachersController singleTestTeachersController =
       Get.put(SingleTestTeachersController());
+   ScrollController scrollController;
   @override
   void initState() {
     super.initState();
-    singleTestTeachersController.getAllTeachers(
+    singleTestTeachersController.getInitialTeachers(
         collectionName: widget.teacherModel.testname);
+    scrollController = ScrollController()..addListener(scrollListener);
+  }
+
+  void scrollListener() {
+    if (scrollController.offset == scrollController.position.maxScrollExtent) {
+      print(scrollController.offset);
+      singleTestTeachersController.getNextTeachers(
+          collectionName: widget.teacherModel.testname);
+    }
   }
 
   @override
@@ -45,21 +55,56 @@ class _SingleTestTeacherPageState extends State<SingleTestTeacherPage> {
           ),
         ],
       ),
-      body: Obx(
-        () => singleTestTeachersController.loading.isTrue
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : RefreshIndicator(
-                onRefresh: () => singleTestTeachersController.getAllTeachers(
-                    collectionName: widget.teacherModel.testname),
-                child: ListView.builder(
-                  itemCount: singleTestTeachersController.listTeacher.length,
-                  itemBuilder: (context, index) => TeacherWidget(
-                    teacher: singleTestTeachersController.listTeacher[index],
-                  ),
+      body: singleTestTeachersController.obx(
+        (state) => RefreshIndicator(
+          onRefresh: () => singleTestTeachersController.getInitialTeachers(
+              collectionName: widget.teacherModel.testname),
+          child: ListView.builder(
+            itemCount: singleTestTeachersController.listTeacher.length,
+            itemBuilder: (context, index) => TeacherWidget(
+              teacher: singleTestTeachersController.listTeacher[index],
+            ),
+          ),
+        ),
+          onEmpty: Center(
+          child: Text(
+            'Oups,Aucune epreuves disponibles',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        onError: (error) => Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                error,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFFD3C4A),
                 ),
               ),
+              IconButton(
+                onPressed: () =>
+                    singleTestTeachersController.getInitialTeachers(
+                        collectionName: widget.teacherModel.testname),
+                icon: Icon(
+                  Icons.replay_outlined,
+                  color: Color(0xFF4ACF70),
+                  size: 48,
+                ),
+              ),
+            ],
+          ),
+        ),
+        onLoading: Center(
+          child: CircularProgressIndicator(),
+        ),
       ),
     );
   }

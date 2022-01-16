@@ -1,11 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:educamer/ad_state.dart';
 import 'package:educamer/models/test.dart';
 import 'package:educamer/services/test_service.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class TestController extends GetxController {
+class TestController extends GetxController with StateMixin<List<Test>> {
   final TestService testService = TestService();
   RxList<Test> testList = <Test>[].obs;
   RxBool loading = false.obs;
@@ -14,7 +14,13 @@ class TestController extends GetxController {
   RewardedAd rewardedAd;
   BannerAd bannerAd;
   RxBool loadAd = false.obs;
-  List<Object> listTest;
+  QueryDocumentSnapshot lastFetchDocument;
+  List<QueryDocumentSnapshot> initialList;
+  List<QueryDocumentSnapshot> newFetchedList;
+  RxBool loadMore;
+
+  RxInt numberToloadAtTime = 10.obs;
+  RxInt numberToloadFromNextTime = 20.obs;
   @override
   void onInit() {
     createRewardedLoad();
@@ -32,27 +38,60 @@ class TestController extends GetxController {
   }
 
   Future<void> getAllTest({String collectionName}) async {
-    loading.value = true;
+    change(null, status: RxStatus.loading());
     try {
-      /* listTest = List.from(
-          await testService.getAllTest(collectionName: collectionName));
-      for (int i = 0; i <= listTest.length - 1; i--) {
-        listTest.insert(
-            i,
-            BannerAd(
-                size: AdSize.fullBanner,
-                adUnitId: BannerAd.testAdUnitId,
-                listener: adState.adListener,
-                request: AdRequest())..load());
-      } */
-      testList.value =
-          await testService.getAllTest(collectionName: collectionName);
-      loading.value = false;
-    } on FirebaseException catch (e) {
+      // testList.value =
+      initialList = [];
+      testList.value = [];
+      initialList = await testService.getInitialTestList(
+        collectionName: collectionName,
+        lastFetchDocument: lastFetchDocument,
+        numberToLoadAtTime: numberToloadAtTime.value,
+      );
+      initialList.forEach((element) {
+        testList.add(Test.fromMap(element.data()));
+      });
+      if (testList.length == 0) {
+        change(null, status: RxStatus.empty());
+      } else {
+        change(testList, status: RxStatus.success());
+        lastFetchDocument = initialList[initialList.length - 1];
+        print(initialList.length - 1);
+      }
+     
+    } on TestException catch (e) {
       print(e.message);
-    } finally {
-      loading.value = false;
+      change(null, status: RxStatus.error(e.message));
     }
+  }
+
+  Future<void> fetchNextTest({String collectionName}) async {
+    // change(null, status: RxStatus.loading());
+    List<Test> nextTest = [];
+    try {
+      // testList.value =
+      newFetchedList = await testService.getNextTestList(
+        collectionName: collectionName,
+        lastFetchDocument: lastFetchDocument,
+        numberToLoadAtTime: numberToloadAtTime.value,
+      );
+      print(newFetchedList.toString());
+      newFetchedList.forEach((element) {
+        nextTest.add(Test.fromMap(element.data()));
+      });
+      testList.addAll(nextTest);
+
+      if (newFetchedList.length == 0) {
+        print('load more not work');
+      } else {
+        print('load more');
+        lastFetchDocument = newFetchedList[newFetchedList.length - 1];
+        /* newFetchedList.forEach((element) {
+          nextTest.add(Test.fromMap(element.data()));
+        }); */
+        change(testList, status: RxStatus.loadingMore());
+      }
+    } on TestException catch (_) {}
   }
 
   void createIntertitialAd() {

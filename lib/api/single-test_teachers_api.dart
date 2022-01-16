@@ -1,5 +1,6 @@
-import 'package:educamer/models/teacher.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 abstract class SingleTestTeacherApi {
-  Future<List<Teacher>> getAllTeacherByTest();
+  Future<List<QueryDocumentSnapshot>> getAllTeacherByTest();
 }

@@ -1,13 +1,16 @@
+
 import 'package:educamer/models/teachermodel.dart';
 import 'package:educamer/services/all_teachers_service.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:get/get.dart';
 
-class AllTeachersController extends GetxController {
+class AllTeachersController extends GetxController
+    with StateMixin<List<TeacherModel>> {
   final AllTeachersService allTeachersService = AllTeachersService();
-  List<TeacherModel> allTeachers = [];
-  RxBool loading = false.obs;
-
+ 
+  List<TeacherModel> allTeacher = [];
+  
+  
   @override
   void onInit() {
     super.onInit();
@@ -15,13 +18,16 @@ class AllTeachersController extends GetxController {
   }
 
   Future<void> getAllTeachers() async {
-    loading.value = true;
+    change(null, status: RxStatus.loading());
     try {
-      allTeachers = await allTeachersService.getAllHomeTeacherByTest();
-      loading.value = false;
-    } on FirebaseException catch (e) {
-      print(e.message);
-      loading.value = false;
+      allTeacher = await allTeachersService.getAllHomeTeacherByTest();
+      if (allTeacher.length == 0) {
+        change(null, status: RxStatus.empty());
+      } else {
+        change(allTeacher, status: RxStatus.success());
+      }
+    } on TeacherModelException catch (e) {
+      change(null, status: RxStatus.error(e.message));
     }
   }
 }
