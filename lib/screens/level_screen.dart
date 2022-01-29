@@ -39,7 +39,13 @@ class _LevelScreenState extends State<LevelScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
+        shadowColor: Colors.black.withOpacity(.25),
+        backgroundColor: Theme.of(context).primaryColor,
+        shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.only(bottomLeft: Radius.elliptical(16, 16.0))),
         title: Text(
           widget.level.name,
           style: TextStyle(
@@ -47,8 +53,7 @@ class _LevelScreenState extends State<LevelScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Color(0xFF4ACF70),
-        elevation: 0,
+        //backgroundColor: Color(0xFF4ACF70),
       ),
       body: Obx(
         () => levelController.loading.isTrue
@@ -56,6 +61,7 @@ class _LevelScreenState extends State<LevelScreen> {
                 child: CircularProgressIndicator(),
               )
             : GridView.builder(
+                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 itemCount: levelController.listMatiere.length,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,

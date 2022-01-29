@@ -10,66 +10,65 @@ class BuildMatiere extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: Card(
-        child: Container(
-          height: 70,
-          width: 70,
-          /* foregroundDecoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(0.1), BlendMode.dstATop),
-              image: NetworkImage(matiere.image),
+      focusColor: Colors.transparent,
+      child: Container(
+        height: 70,
+        width: 70,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.all(
+            Radius.circular(16.0),
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(.1),
+              offset: Offset(0, 5),
+              blurRadius: 14,
+              spreadRadius: 0,
+            )
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              matiere.name,
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
             ),
-          ), */
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                matiere.name,
+            CustomPaint(
+              painter: MyTextPainter(),
+            ),
+            CircleAvatar(
+              radius: 20,
+              backgroundColor: Colors.black,
+              child: Text(
+                matiere.epreuves,
                 style: TextStyle(
-                  color: Colors.green,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+                  color: Colors.white,
                 ),
               ),
-              CustomPaint(
-                painter: MyTextPainter(),
+            ),
+            Text(
+              ' Epreuves',
+              style: TextStyle(
+                color: Colors.black,
               ),
-              CircleAvatar(
-                radius: 20,
-                backgroundColor: Colors.black,
-                child: Text(
-                  matiere.epreuves,
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              Text(
-                ' Epreuves',
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 }
 
-class  MyTextPainter extends CustomPainter {
-
+class MyTextPainter extends CustomPainter {
   @override
-  void paint(Canvas canvas, Size size) {
-    
-  }
+  void paint(Canvas canvas, Size size) {}
 
   @override
   bool shouldRepaint(MyTextPainter oldDelegate) => false;

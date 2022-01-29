@@ -18,7 +18,7 @@ class TestService extends TestApi {
           .limit(numberToLoadAtTime)
           .get()
           .timeout(
-            Duration(seconds: 1),
+            Duration(minutes: 1),
           );
 
       /* .then((querySnapshot) => {

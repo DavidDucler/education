@@ -18,7 +18,12 @@ class _TeacherHomeState extends State<TeacherHome> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Enseignants à domicile'),
+        title: Text(
+          'Enseignants à domicile',
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
         elevation: 0,
         backgroundColor: Colors.black,
       ),
