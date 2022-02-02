@@ -49,7 +49,7 @@ class BuildNiveau extends StatelessWidget {
                   Text(
                     niveau.name,
                     style: TextStyle(
-                      color: Colors.green,
+                      color: Theme.of(context).primaryColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
                     ),

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:educamer/models/teacher.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -26,6 +27,7 @@ class _DetailsTeacherState extends State<DetailsTeacher> {
             snap: true,
             floating: true,
             expandedHeight: 300,
+            backgroundColor: Theme.of(context).primaryColor,
             actions: [
               IconButton(
                 onPressed: () {},
@@ -36,31 +38,37 @@ class _DetailsTeacherState extends State<DetailsTeacher> {
               ),
             ],
             flexibleSpace: FlexibleSpaceBar(
-              title: Text(
-                'Mr/Mne  ' +
-                    widget.teacher.lastName +
-                    ' ' +
-                    widget.teacher.firstName +
-                    ' (' +
-                    widget.teacher.age +
-                    ' ans)',
-                style: TextStyle(
-                  fontSize: 16.0,
+              title: RichText(
+                text: TextSpan(
+                  text: widget.teacher.gender == 0 ? 'Mne ' : 'Mr ',
+                  style: GoogleFonts.nunitoSans(
+                    fontSize: 14,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  children: [
+                    TextSpan(
+                      text: widget.teacher.lastName +
+                          ' ' +
+                          widget.teacher.firstName,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )
+                  ],
                 ),
               ),
-              background: Image(
-                image: NetworkImage(widget.teacher.imagePath),
+              background: CachedNetworkImage(
+                imageUrl: widget.teacher.imagePath,
                 fit: BoxFit.cover,
+                color: Colors.black.withOpacity(.1),
+                colorBlendMode: BlendMode.darken,
               ),
             ),
           ),
-          /*  SliverPersistentHeader(
-            pinned: true,
-            floating: true,
-            delegate: CustomSliverDelegate(
-              expandedHeight: 300,
-            ),
-          ), */
+          
           SliverList(
             delegate: SliverChildListDelegate(
               [
@@ -71,15 +79,19 @@ class _DetailsTeacherState extends State<DetailsTeacher> {
                     color: Colors.white,
                     child: ExpansionTile(
                       childrenPadding: EdgeInsets.symmetric(horizontal: 50),
+                      initiallyExpanded: true,
                       leading: CircleAvatar(
                         backgroundColor: Color(0xFFCBCBCB),
                         child: Icon(
                           Icons.info,
+                          color: Theme.of(context).primaryColor,
                         ),
                       ),
                       title: Text(
                         'A propos',
-                        style: GoogleFonts.nunitoSans(),
+                        style: GoogleFonts.nunitoSans(
+                          color: Theme.of(context).primaryColor,
+                        ),
                       ),
                       children: [
                         ListTile(
@@ -146,11 +158,13 @@ class _DetailsTeacherState extends State<DetailsTeacher> {
                       backgroundColor: Color(0xFFCBCBCB),
                       child: Icon(
                         Icons.language,
+                        color: Theme.of(context).primaryColor,
                       ),
                     ),
                     title: Text(
                       'Langues',
-                      style: GoogleFonts.nunitoSans(),
+                      style: GoogleFonts.nunitoSans(
+                          color: Theme.of(context).primaryColor),
                     ),
                     subtitle: Row(
                       children: List.generate(

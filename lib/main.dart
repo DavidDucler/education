@@ -19,7 +19,7 @@ class MyApp extends GetWidget<AdState> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Educamer',
+      title: 'SujetCam',
       defaultTransition: Transition.fadeIn,
       transitionDuration: Duration(seconds: 1),
       theme: ThemeData(

@@ -68,7 +68,7 @@ class _SingleTestTeacherPageState extends State<SingleTestTeacherPage> {
         ),
           onEmpty: Center(
           child: Text(
-            'Oups,Aucune epreuves disponibles',
+            'Oups,Aucune Enseignants disponibles',
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 20,

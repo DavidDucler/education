@@ -17,6 +17,7 @@ class _TeacherHomeState extends State<TeacherHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text(
           'Enseignants à domicile',
@@ -31,6 +32,10 @@ class _TeacherHomeState extends State<TeacherHome> {
         (state) => RefreshIndicator(
           onRefresh: () => allTeachersController.getAllTeachers(),
           child: GridView.builder(
+            padding: EdgeInsets.symmetric(
+              horizontal: 5,
+              vertical: 10,
+            ),
             itemCount: state.length,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,

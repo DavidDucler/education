@@ -97,7 +97,14 @@ class _PageMatiereState extends State<PageMatiere> {
     });
   }
 
-  Future<void> makeSearch() async {}
+  Future<void> makeSearch() async {
+    testController.makeSearch(
+      collectionName: widget.url,
+      schoolname: name.text,
+      annee: year,
+      sequence: sequence,
+    );
+  }
 
   void onChangeYear() {
     var contains =
@@ -223,7 +230,7 @@ class _PageMatiereState extends State<PageMatiere> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  reset();
+                                  //reset();
                                   ss(() {
                                     year = null;
                                     sequence = null;
@@ -259,7 +266,7 @@ class _PageMatiereState extends State<PageMatiere> {
                             cursorColor: Colors.black,
                             controller: name,
                             onChanged: (String value) {
-                              onChanged();
+                            //  onChanged();
                             },
                             decoration: InputDecoration(
                               labelText: 'nom du lycee ou college',
@@ -287,7 +294,7 @@ class _PageMatiereState extends State<PageMatiere> {
                               ss(() {
                                 sequence = val;
                               });
-                              onChangeSequence();
+                             // onChangeSequence();
                             },
                             items: sequences
                                 .map((e) =>
@@ -311,7 +318,7 @@ class _PageMatiereState extends State<PageMatiere> {
                               ss(() {
                                 year = val;
                               });
-                              onChangeYear();
+                             // onChangeYear();
                             },
                             items: years
                                 .map(
@@ -335,7 +342,7 @@ class _PageMatiereState extends State<PageMatiere> {
                                   ),
                                 ),
                                 onPressed: () {
-                                  Get.back();
+                                  makeSearch().then((value) => Get.back());
                                 },
                                 child: Text(
                                   'Appliquer',

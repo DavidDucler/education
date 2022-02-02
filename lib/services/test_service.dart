@@ -44,7 +44,45 @@ class TestService extends TestApi {
               'Une erreur est survenue,Verifier votre connection internet ou Ressayez plus tard.');
     }
   }
+    Future<List<QueryDocumentSnapshot>> makeSearch(
+      {String collectionName,
+      int numberToLoadAtTime,
+      String schoolname,
+      String sequence,
+      String annee,
+      QueryDocumentSnapshot lastFetchDocument}) async {
+    try {
+      QuerySnapshot querySnapshot = await firebaseFirestore
+          .collection(collectionName)
+          .where(
+            'schoolname',
+            isEqualTo: schoolname,
+          )
+          .where('annee', isEqualTo: annee)
+          .where('sequence', isEqualTo: sequence)
+          .limit(numberToLoadAtTime)
+          .get()
+          .timeout(
+            Duration(minutes: 1),
+          );
 
+      if (querySnapshot.docs.length == 0) {
+        throw TestException(
+            message: 'Votre recherche n\'a donne aucun resultat');
+      }
+      return querySnapshot.docs;
+    } on TimeoutException catch (e) {
+      print(e.message);
+      throw TestException(
+          message:
+              'Impossible de charger les epreuves,Verifier votre connection internet et Ressayez.');
+    } /*  catch (e) {
+      print(e.toString());
+      throw TestException(
+          message:
+              'Une erreur est survenue,Verifier votre connection internet ou Ressayez plus tard.');
+    } */
+  }
   Future<List<QueryDocumentSnapshot>> getNextTestList(
       {String collectionName,
       int numberToLoadAtTime,

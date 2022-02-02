@@ -30,32 +30,18 @@ class _HomeScreenState extends State<HomeScreen> {
       slivers: [
         SliverAppBar(
           title: Text(
-            'EDUCAMER',
+            'SUJETCAM',
             style: TextStyle(
-              color: Colors.lightGreen,
+              color: Theme.of(context).primaryColor,
+              fontWeight: FontWeight.bold,
+              
             ),
           ),
           pinned: true,
+          elevation: 0.0,
           floating: true,
           forceElevated: true,
-          backgroundColor: Colors.black,
-          actions: [
-            Row(
-              children: [
-                Text('Session'),
-                Switch(
-                  value: logIn,
-                  onChanged: (value) {
-                    setState(() {
-                      logIn = value;
-                    });
-                  },
-                  activeColor: Colors.green,
-                  inactiveThumbColor: Colors.white,
-                )
-              ],
-            )
-          ],
+          backgroundColor: Colors.black, 
         ),
         SliverList(
           delegate: SliverChildListDelegate(
@@ -72,24 +58,24 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Bienvenue sur Educamer',
+                      'Bienvenue sur Sujetcam',
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Colors.green,
+                        color: Theme.of(context).primaryColor,
                         fontSize: 18,
                       ),
                     ),
                     Text(
                       'Profitez de notre banque d\'epreuves pour vos differentes matieres.',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 16,
                         color: Colors.black,
                       ),
                     ),
                     Text(
                       'c\'est gratuit et tout se fait en quelques clics.',
                       style: TextStyle(
-                        fontSize: 15,
+                        fontSize: 16,
                         color: Colors.black,
                       ),
                     ),

@@ -3,6 +3,7 @@ import 'package:educamer/models/teacher.dart';
 import 'package:educamer/widgets/teacher_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class TeacherWidget extends StatelessWidget {
   final Teacher teacher;
@@ -42,12 +43,25 @@ class TeacherWidget extends StatelessWidget {
             backgroundImage: NetworkImage(teacher.imagePath),
           ),
         ),
-        title: Text(
-          '(Mr/Mne) ' + teacher.lastName + ' ' + teacher.firstName,
-          style: TextStyle(
-            fontSize: 14,
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
+        title: RichText(
+          text: TextSpan(
+            text: teacher.gender == 0 ? 'Mne ' : 'Mr ',
+            style: GoogleFonts.nunitoSans(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+            children: [
+              TextSpan(
+                text: teacher.lastName + ' ' + teacher.firstName,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
+           
           ),
         ),
         subtitle: Column(

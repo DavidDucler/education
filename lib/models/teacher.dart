@@ -3,7 +3,7 @@ import 'dart:convert';
 class Teacher {
   String firstName;
   String lastName;
-  String gender;
+  int gender;
   String phoneNumber;
   String email;
   String age;
@@ -61,7 +61,7 @@ class Teacher {
     return Teacher(
       firstName: map['firstName'],
       lastName: map['lastName'],
-      // gender: map['gender'],
+      gender: map['gender'],
       phoneNumber: map['phoneNumber'],
       email: map['email'],
       age: map['age'],

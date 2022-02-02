@@ -65,6 +65,40 @@ class TestController extends GetxController with StateMixin<List<Test>> {
     }
   }
 
+   Future<void> makeSearch(
+      {String collectionName,
+      String schoolname,
+      String annee,
+      String sequence}) async {
+    change(null, status: RxStatus.loading());
+    try {
+      // testList.value =
+      initialList = [];
+      testList.value = [];
+      initialList = await testService.makeSearch(
+        schoolname: schoolname,
+        sequence: sequence,
+        annee: annee,
+        collectionName: collectionName,
+        lastFetchDocument: lastFetchDocument,
+        numberToLoadAtTime: numberToloadAtTime.value,
+      );
+      initialList.forEach((element) {
+        testList.add(Test.fromMap(element.data()));
+      });
+      if (testList.length == 0) {
+        change(null, status: RxStatus.error('Aucun Resultat'));
+      } else {
+        change(testList, status: RxStatus.success());
+        lastFetchDocument = initialList[initialList.length - 1];
+        print(initialList.length - 1);
+      }
+    } on TestException catch (e) {
+      print(e.message);
+      change(null, status: RxStatus.error(e.message));
+    }
+  }
+
   Future<void> fetchNextTest({String collectionName}) async {
     // change(null, status: RxStatus.loading());
     List<Test> nextTest = [];
