@@ -27,110 +27,131 @@ class TeacherWidget extends StatelessWidget {
               spreadRadius: 5,
             )
           ]),
-      child: ListTile(
-        onTap: () {
-          Get.to(
-            () => DetailsTeacher(
-              teacher: teacher,
+      child: Column(
+        children: [
+          ListTile(
+            onTap: () {
+              Get.to(
+                () => DetailsTeacher(
+                  teacher: teacher,
+                ),
+              );
+            },
+            contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            leading: Container(
+              width: 70,
+              child: CircleAvatar(
+                radius: 40,
+                backgroundImage: NetworkImage(teacher.imagePath),
+              ),
             ),
-          );
-        },
-        contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-        leading: Container(
-          width: 70,
-          child: CircleAvatar(
-            radius: 40,
-            backgroundImage: NetworkImage(teacher.imagePath),
-          ),
-        ),
-        title: RichText(
-          text: TextSpan(
-            text: teacher.gender == 0 ? 'Mne ' : 'Mr ',
-            style: GoogleFonts.nunitoSans(
-              fontSize: 14,
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-            children: [
-              TextSpan(
-                text: teacher.lastName + ' ' + teacher.firstName,
-                style: TextStyle(
+            title: RichText(
+              text: TextSpan(
+                text: teacher.gender == 0 ? 'Mne ' : 'Mr ',
+                style: GoogleFonts.nunitoSans(
                   fontSize: 14,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
-              )
-            ],
-           
-          ),
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Text(
-              'Age: ' + teacher.age + ' ans',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Text(
-              'Telephone: ' + teacher.phoneNumber,
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        trailing: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Container(
-              width: 80,
-              child: Row(
                 children: [
-                  Icon(
-                    Icons.location_city,
-                    color: Colors.pinkAccent,
-                    size: 24,
-                  ),
-                  Text(
-                    teacher.city,
+                  TextSpan(
+                    text: teacher.lastName + ' ' + teacher.firstName,
                     style: TextStyle(
-                      fontSize: 12,
+                      fontSize: 14,
+                      color: Colors.black,
                       fontWeight: FontWeight.bold,
                     ),
                   )
                 ],
               ),
             ),
-            Text(
-              teacher.domicile,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            Expanded(
-              child: IconButton(
-                icon: Icon(
-                  Icons.visibility,
-                  color: Theme.of(context).primaryColor,
-                  size: 20,
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'Age: ' + teacher.age + ' ans',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                onPressed: () {
-                  Get.to(
-                    () => DetailsTeacher(
-                      teacher: teacher,
+                Text(
+                  'Telephone: ' + teacher.phoneNumber,
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            trailing: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Container(
+                  width: 80,
+                  child: Row(
+                    children: [
+                      Icon(
+                        Icons.location_city,
+                        color: Colors.pinkAccent,
+                        size: 24,
+                      ),
+                      Text(
+                        teacher.city,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Text(
+                  teacher.domicile,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Expanded(
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.visibility,
+                      color: Theme.of(context).primaryColor,
+                      size: 20,
                     ),
-                  );
-                },
+                    onPressed: () {
+                      Get.to(
+                        () => DetailsTeacher(
+                          teacher: teacher,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+          OutlinedButton(
+            style: OutlinedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(15.0)))),
+            onPressed: () {
+              Get.to(
+                () => DetailsTeacher(
+                  teacher: teacher,
+                ),
+              );
+            },
+            child: Text(
+              'Details',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

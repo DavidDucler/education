@@ -1,9 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:educamer/ad_state.dart';
 import 'package:educamer/models/test.dart';
 import 'package:educamer/services/test_service.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 
 class TestController extends GetxController with StateMixin<List<Test>> {
   final TestService testService = TestService();
@@ -17,7 +22,9 @@ class TestController extends GetxController with StateMixin<List<Test>> {
   QueryDocumentSnapshot lastFetchDocument;
   List<QueryDocumentSnapshot> initialList;
   List<QueryDocumentSnapshot> newFetchedList;
-  RxBool loadMore;
+  bool loadMore = false;
+  RxDouble download = 0.0.obs;
+  RxBool loadDown = false.obs;
 
   RxInt numberToloadAtTime = 10.obs;
   RxInt numberToloadFromNextTime = 20.obs;
@@ -55,17 +62,21 @@ class TestController extends GetxController with StateMixin<List<Test>> {
         change(null, status: RxStatus.empty());
       } else {
         change(testList, status: RxStatus.success());
-        lastFetchDocument = initialList[initialList.length - 1];
-        print(initialList.length - 1);
+        if (testList.length < numberToloadAtTime.value) {
+          loadMore = false;
+        } else {
+          loadMore = true;
+          lastFetchDocument = initialList[initialList.length - 1];
+          print(lastFetchDocument.data());
+        }
       }
-     
     } on TestException catch (e) {
       print(e.message);
       change(null, status: RxStatus.error(e.message));
     }
   }
 
-   Future<void> makeSearch(
+  Future<void> makeSearch(
       {String collectionName,
       String schoolname,
       String annee,
@@ -87,7 +98,7 @@ class TestController extends GetxController with StateMixin<List<Test>> {
         testList.add(Test.fromMap(element.data()));
       });
       if (testList.length == 0) {
-        change(null, status: RxStatus.error('Aucun Resultat'));
+        change(null, status: RxStatus.error('Aucun Résultat'));
       } else {
         change(testList, status: RxStatus.success());
         lastFetchDocument = initialList[initialList.length - 1];
@@ -100,30 +111,27 @@ class TestController extends GetxController with StateMixin<List<Test>> {
   }
 
   Future<void> fetchNextTest({String collectionName}) async {
-    // change(null, status: RxStatus.loading());
     List<Test> nextTest = [];
     try {
       // testList.value =
       newFetchedList = await testService.getNextTestList(
         collectionName: collectionName,
-        lastFetchDocument: lastFetchDocument,
+        lastFetchDocument: initialList.isNotEmpty ? lastFetchDocument : null,
         numberToLoadAtTime: numberToloadAtTime.value,
       );
       print(newFetchedList.toString());
       newFetchedList.forEach((element) {
-        nextTest.add(Test.fromMap(element.data()));
+        testList.add(Test.fromMap(element.data()));
       });
-      testList.addAll(nextTest);
-
-      if (newFetchedList.length == 0) {
-        print('load more not work');
+      
+      if (newFetchedList.length <= numberToloadAtTime.value) {
+        loadMore = false;
+        change(testList, status: RxStatus.loadingMore());
       } else {
+        change(testList, status: RxStatus.loadingMore());
+        loadMore = true;
         print('load more');
         lastFetchDocument = newFetchedList[newFetchedList.length - 1];
-        /* newFetchedList.forEach((element) {
-          nextTest.add(Test.fromMap(element.data()));
-        }); */
-        change(testList, status: RxStatus.loadingMore());
       }
     } on TestException catch (_) {}
   }
@@ -309,4 +317,65 @@ class TestController extends GetxController with StateMixin<List<Test>> {
       rewardedAd.dispose();
     }
   }
+
+  Future<void> downloadFile({String fileUrl}) async {
+    String name = fileUrl.split('/').last;
+    name = name.split('?').first;
+    print(name);
+    final appStorage = await getApplicationDocumentsDirectory();
+    final File file = File('${appStorage.path}/$name');
+    print(appStorage.path);
+    loadDown.value = true;
+    try {
+      final response = await Dio().get(
+        fileUrl,
+        options: Options(
+          responseType: ResponseType.bytes,
+          followRedirects: true,
+          receiveTimeout: 0,
+        ),
+        onReceiveProgress: (count, total) {
+          var a = (count / total);
+          print(a);
+          download.value = a;
+        },
+      );
+      if (response.statusCode == 200) {
+        print(response.statusMessage);
+        print(response.data);
+        final raf = file.openSync(mode: FileMode.write);
+        raf.writeFromSync(response.data);
+        await raf.close();
+        loadDown.value = false;
+        download.value = 0.0;
+        print(file.path);
+        OpenFile.open(file.path);
+      } else {
+        print('error');
+      }
+    } on DioError catch (e) {
+      loadDown.value = false;
+      Get.showSnackbar(
+        GetBar(
+          title: 'Message',
+          message: 'Verifier votre connection internet et ressayer',
+          duration: Duration(seconds: 5),
+        ),
+      );
+    } on FileSystemException catch (e) {
+      loadDown.value = false;
+      Get.showSnackbar(
+        GetBar(
+          title: 'Message',
+          message: 'Verifier votre connection internet et ressayer',
+          duration: Duration(seconds: 5),
+        ),
+      );
+    }
+  }
+}
+
+class TestException implements Exception {
+  final String message;
+  TestException({this.message});
 }

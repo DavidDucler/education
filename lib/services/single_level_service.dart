@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:educamer/api/single_level_api.dart';
 import 'package:educamer/models/matiere.dart';
 
@@ -11,6 +14,7 @@ class SingleLevelService extends SingleLevelApi {
       await firebaseFirestore
           .collection(collectionName)
           .get()
+          .timeout(Duration(seconds: 60))
           .then((querySnapshot) => {
                 querySnapshot.docs.forEach((doc) {
                   print(doc.data());
@@ -18,9 +22,19 @@ class SingleLevelService extends SingleLevelApi {
                 })
               });
       return listMatiere;
-    } on FirebaseException catch (e) {
-      print(e.message);
-      return listMatiere;
+    } on TimeoutException catch (e) {
+      throw SingleLevelException(
+          message:
+              'Impossible de charger les classes disponibles,Vérifier votre connection internet et réssayez Svp');
+    } catch (e) {
+      throw SingleLevelException();
     }
   }
+}
+
+class SingleLevelException implements Exception {
+  final String message;
+  SingleLevelException({
+    this.message = 'Une erreur est survenue,Ressayez Svp',
+  });
 }

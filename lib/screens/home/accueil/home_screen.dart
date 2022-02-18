@@ -34,14 +34,13 @@ class _HomeScreenState extends State<HomeScreen> {
             style: TextStyle(
               color: Theme.of(context).primaryColor,
               fontWeight: FontWeight.bold,
-              
             ),
           ),
           pinned: true,
           elevation: 0.0,
           floating: true,
           forceElevated: true,
-          backgroundColor: Colors.black, 
+          backgroundColor: Colors.black,
         ),
         SliverList(
           delegate: SliverChildListDelegate(
@@ -152,7 +151,68 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        Obx(
+        homeScreenController.obx(
+          (state) => SliverStaggeredGrid.countBuilder(
+            crossAxisCount: 2,
+            mainAxisSpacing: 0,
+            crossAxisSpacing: 0,
+            staggeredTileBuilder: (int index) => StaggeredTile.count(
+              1,
+              index.isEven ? 2 : 1,
+            ),
+            itemBuilder: (context, int index) {
+              return BuildNiveau(
+                onTap: () {
+                  homeScreenController.createIntertitialAd();
+                  Get.to(() => LevelScreen(level: state[index]));
+                },
+                niveau: Niveau(
+                  name: state[index].name,
+                  nbEpreuves: state[index].nbEpreuves,
+                ),
+              );
+            },
+            itemCount: state.length,
+          ),
+          onEmpty: Center(),
+          onLoading: SliverToBoxAdapter(
+            child: Center(
+              child: SizedBox(
+                width: 30,
+                height: 30,
+                child: CircularProgressIndicator(),
+              ),
+            ),
+          ),
+          onError: (error) => SliverToBoxAdapter(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  error,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                IconButton(
+                  onPressed: () {
+                    homeScreenController.reloads();
+                  },
+                  icon: Icon(
+                    Icons.restart_alt,
+                    color: Theme.of(context).primaryColor,
+                    size: 28,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+/*         Obx(
           () => homeScreenController.loading.isTrue
               ? SliverList(
                   delegate: SliverChildListDelegate(
@@ -191,7 +251,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                   itemCount: homeScreenController.listLevel.length,
                 ),
-        )
+        ) */
       ],
     );
   }

@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:educamer/models/teacher.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailsTeacher extends StatefulWidget {
   final Teacher teacher;
@@ -30,7 +32,11 @@ class _DetailsTeacherState extends State<DetailsTeacher> {
             backgroundColor: Theme.of(context).primaryColor,
             actions: [
               IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  String url =
+                      "https://wa.me/+237${widget.teacher.phoneNumber}/?text=Bonjour Mr/Mdne";
+                  launch(url);
+                },
                 icon: Icon(
                   Icons.phone,
                   color: Colors.white,
@@ -68,176 +74,276 @@ class _DetailsTeacherState extends State<DetailsTeacher> {
               ),
             ),
           ),
-          
           SliverList(
             delegate: SliverChildListDelegate(
               [
-                Card(
-                  margin: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-                  elevation: 1.0,
-                  child: Container(
-                    color: Colors.white,
-                    child: ExpansionTile(
-                      childrenPadding: EdgeInsets.symmetric(horizontal: 50),
-                      initiallyExpanded: true,
-                      leading: CircleAvatar(
-                        backgroundColor: Color(0xFFCBCBCB),
-                        child: Icon(
-                          Icons.info,
-                          color: Theme.of(context).primaryColor,
-                        ),
+                Container(
+                  color: Colors.white,
+                  child: ExpansionTile(
+                    childrenPadding: EdgeInsets.symmetric(horizontal: 10),
+                    initiallyExpanded: true,
+                    leading: CircleAvatar(
+                      backgroundColor: Color(0xFFCBCBCB),
+                      child: Icon(
+                        Icons.info,
+                        color: Theme.of(context).primaryColor,
                       ),
-                      title: Text(
-                        'A propos',
-                        style: GoogleFonts.nunitoSans(
-                          color: Theme.of(context).primaryColor,
-                        ),
-                      ),
-                      children: [
-                        ListTile(
-                          title: Text(
-                            'Telephone',
-                            style: GoogleFonts.nunitoSans(),
-                          ),
-                          subtitle: Text(
-                            widget.teacher.phoneNumber,
-                            style: GoogleFonts.nunitoSans(),
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Description',
-                            style: GoogleFonts.nunitoSans(),
-                          ),
-                          subtitle: Text(
-                            widget.teacher.about,
-                            style: GoogleFonts.nunitoSans(),
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Années d\'experiences',
-                            style: GoogleFonts.nunitoSans(),
-                          ),
-                          subtitle: Text(
-                            widget.teacher.experienceYear + 'ans ',
-                          ),
-                        ),
-                        ListTile(
-                          title: Text(
-                            'Adresse-email',
-                          ),
-                          subtitle: Text(
-                            widget.teacher.email,
-                          ),
-                        ),
-                        ListTile(
-                          title: Text('Ville & Residence'),
-                          subtitle: Row(
-                            children: [
-                              Text(widget.teacher.city),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(widget.teacher.domicile),
-                            ],
-                          ),
-                        )
-                      ],
                     ),
+                    title: Text(
+                      'A propos',
+                      style: GoogleFonts.nunitoSans(
+                        color: Theme.of(context).primaryColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    children: [
+                      ListTile(
+                        title: Row(
+                          children: [
+                            Text(
+                              'Telephone',
+                              style: GoogleFonts.nunitoSans(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                String url =
+                                    "https://wa.me/+237${widget.teacher.phoneNumber}/?text=Bonjour Mr/Mdne";
+                                launch(url);
+                              },
+                              icon: Icon(
+                                FontAwesomeIcons.whatsapp,
+                                color: Theme.of(context).primaryColor,
+                                size: 32,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                String url =
+                                    'tel:+237${widget.teacher.phoneNumber}';
+                                await launch(url);
+                              },
+                              icon: Icon(
+                                Icons.phone,
+                                color: Theme.of(context).primaryColor,
+                                size: 32,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                String url =
+                                    'sms:+237${widget.teacher.phoneNumber}';
+                                await launch(url);
+                              },
+                              icon: Icon(
+                                Icons.sms,
+                                color: Theme.of(context).primaryColor,
+                                size: 32,
+                              ),
+                            ),
+                          ],
+                        ),
+                        subtitle: Text(
+                          widget.teacher.phoneNumber,
+                          style: GoogleFonts.nunitoSans(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                          'Description',
+                          style: GoogleFonts.nunitoSans(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Text(
+                          widget.teacher.about,
+                          style: GoogleFonts.nunitoSans(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                          'Années d\'experiences',
+                          style: GoogleFonts.nunitoSans(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Text(
+                          widget.teacher.experienceYear + 'ans ',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                          'Adresse-email',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Text(
+                          widget.teacher.email,
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        trailing: IconButton(
+                            onPressed: () async {
+                              String url =
+                                  'mailto:${widget.teacher.email}?subject=Cour a domicile';
+                              await launch(url);
+                            },
+                            icon: Icon(
+                              Icons.email,
+                              size: 32,
+                              color: Theme.of(context).primaryColor,
+                            )),
+                      ),
+                      ListTile(
+                        title: Text(
+                          'Ville & Residence',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        subtitle: Row(
+                          children: [
+                            Text(
+                              widget.teacher.city,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              widget.teacher.domicile,
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
                 const SizedBox(
                   height: 10,
                 ),
-                Card(
-                  margin: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                  elevation: 1.0,
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Color(0xFFCBCBCB),
-                      child: Icon(
-                        Icons.language,
-                        color: Theme.of(context).primaryColor,
-                      ),
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Color(0xFFCBCBCB),
+                    child: Icon(
+                      Icons.language,
+                      color: Theme.of(context).primaryColor,
                     ),
-                    title: Text(
-                      'Langues',
-                      style: GoogleFonts.nunitoSans(
-                          color: Theme.of(context).primaryColor),
+                  ),
+                  title: Text(
+                    'Langues',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
-                    subtitle: Row(
-                      children: List.generate(
-                        widget.teacher.lang.length,
-                        (index) => Text(widget.teacher.lang[index] + ' '),
+                  ),
+                  subtitle: Row(
+                    children: List.generate(
+                      widget.teacher.lang.length,
+                      (index) => Text(
+                        widget.teacher.lang[index] + ' ',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                 ),
-                Card(
-                  margin: EdgeInsets.symmetric(vertical: 5, horizontal: 0),
-                  elevation: 1.0,
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 8, horizontal: 30),
-                    child: Column(
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Tarification',
-                              style: GoogleFonts.nunitoSans(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                              ),
+                Container(
+                  padding: EdgeInsets.symmetric(vertical: 8, horizontal: 30),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Tarification',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Premier cycle',
+                            style: GoogleFonts.nunitoSans(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
                             ),
-                            Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Premier cycle',
-                                      style: GoogleFonts.nunitoSans(
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      widget.teacher.firstCyclePrice +
-                                          ' fcfa/heure',
-                                      style: GoogleFonts.nunitoSans(),
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      'Second Cycle',
-                                      style: GoogleFonts.nunitoSans(
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      widget.teacher.secondCyclePrice +
-                                          ' fcfa/heure',
-                                      style: GoogleFonts.nunitoSans(),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
-                        )
-                      ],
-                    ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            widget.teacher.firstCyclePrice + ' fcfa/heure',
+                            style: GoogleFonts.nunitoSans(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            'Second Cycle',
+                            style: GoogleFonts.nunitoSans(
+                              color: Theme.of(context).primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            widget.teacher.secondCyclePrice + ' fcfa/heure',
+                            style: GoogleFonts.nunitoSans(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
               ],

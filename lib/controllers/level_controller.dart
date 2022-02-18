@@ -5,7 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class LevelController extends GetxController {
+class LevelController extends GetxController with StateMixin<List<Matiere>> {
   final SingleLevelService singleLevelService = SingleLevelService();
   final AdState adState = Get.find();
   BannerAd bannerAd;
@@ -39,16 +39,18 @@ class LevelController extends GetxController {
   }
 
   Future<void> getLevelMatieres({String collectionName}) async {
-    loading.value = true;
+    change(null, status: RxStatus.loading());
     try {
       listMatiere.value =
           await singleLevelService.getAll(collectionName: collectionName);
-      loading.value = false;
-    } on FirebaseException catch (e) {
-      print(e.message);
-      loading.value = false;
-    } finally {
-      loading.value = false;
+      print(listMatiere);
+      if (listMatiere.length == 0) {
+        change(null, status: RxStatus.empty());
+      } else {
+        change(listMatiere, status: RxStatus.success());
+      }
+    } on SingleLevelException catch (e) {
+      change(null, status: RxStatus.error(e.message));
     }
   }
 }

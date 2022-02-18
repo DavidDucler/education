@@ -66,10 +66,7 @@ class TestService extends TestApi {
             Duration(minutes: 1),
           );
 
-      if (querySnapshot.docs.length == 0) {
-        throw TestException(
-            message: 'Votre recherche n\'a donne aucun resultat');
-      }
+      
       return querySnapshot.docs;
     } on TimeoutException catch (e) {
       print(e.message);

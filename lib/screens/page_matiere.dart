@@ -83,9 +83,12 @@ class _PageMatiereState extends State<PageMatiere> {
   }
 
   void scrollListener() {
-    if (scrollController.offset == scrollController.position.maxScrollExtent) {
-      print(scrollController.offset);
-      testController.fetchNextTest(collectionName: widget.url);
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      if (testController.loadMore == true) {
+        print(testController.lastFetchDocument.data());
+        testController.fetchNextTest(collectionName: widget.url);
+      }
     }
   }
 
@@ -266,7 +269,7 @@ class _PageMatiereState extends State<PageMatiere> {
                             cursorColor: Colors.black,
                             controller: name,
                             onChanged: (String value) {
-                            //  onChanged();
+                              //  onChanged();
                             },
                             decoration: InputDecoration(
                               labelText: 'nom du lycee ou college',
@@ -294,7 +297,7 @@ class _PageMatiereState extends State<PageMatiere> {
                               ss(() {
                                 sequence = val;
                               });
-                             // onChangeSequence();
+                              // onChangeSequence();
                             },
                             items: sequences
                                 .map((e) =>
@@ -318,7 +321,7 @@ class _PageMatiereState extends State<PageMatiere> {
                               ss(() {
                                 year = val;
                               });
-                             // onChangeYear();
+                              // onChangeYear();
                             },
                             items: years
                                 .map(

@@ -3,10 +3,10 @@ import 'package:educamer/models/niveau.dart';
 import 'package:educamer/services/all_collection_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class HomeScreenController extends GetxController {
+class HomeScreenController extends GetxController
+    with StateMixin<List<Niveau>> {
   final AllLevelService _allLevelService = AllLevelService();
   final AdState adState = Get.find();
   List<Niveau> listLevel = [];
@@ -53,13 +53,30 @@ class HomeScreenController extends GetxController {
   }
 
   Future<void> getAllLevels({BannerAd bannerAd}) async {
-    loading.value = true;
+    change(null, status: RxStatus.loading());
     try {
       listLevel = await _allLevelService.allLevels();
-      loading.value = false;
-    } on FirebaseException catch (e) {
-      print(e.message);
-      loading.value = false;
+      if (listLevel.length == 0) {
+        change(null, status: RxStatus.empty());
+      } else {
+        change(listLevel, status: RxStatus.success());
+      }
+    } on AllServiceException catch (e) {
+      change(null, status: RxStatus.error(e.message));
+    }
+  }
+
+  Future<void> reloads() async {
+    change(null, status: RxStatus.loading());
+    try {
+      listLevel = await _allLevelService.allLevels();
+      if (listLevel.length == 0) {
+        change(null, status: RxStatus.empty());
+      } else {
+        change(listLevel, status: RxStatus.success());
+      }
+    } on AllServiceException catch (e) {
+      change(null, status: RxStatus.error(e.message));
     }
   }
 

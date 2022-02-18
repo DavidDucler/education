@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
         color: Colors.green,
         child: Center(
           child: Text(
-            'EDUCAMER',
+            'Sujetcam',
             style: TextStyle(
               fontSize: 32,
               color: Colors.white,

@@ -55,37 +55,69 @@ class _LevelScreenState extends State<LevelScreen> {
         ),
         //backgroundColor: Color(0xFF4ACF70),
       ),
-      body: Obx(
-        () => levelController.loading.isTrue
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : GridView.builder(
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                itemCount: levelController.listMatiere.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 10,
-                ),
-                itemBuilder: (context, index) => Obx(
-                  () => BuildMatiere(
-                    onTap: () {
-                      testController.createRewardedLoad();
-                      Get.to(
-                        () => PageMatiere(
-                          url: widget.level.name +
-                              '-' +
-                              levelController.listMatiere[index].name,
-                        ),
-                      );
-                    },
-                    matiere: Matiere(
-                        name: levelController.listMatiere[index].name,
-                        epreuves: levelController.listMatiere[index].epreuves,
-                        image: levelController.listMatiere[index].image),
+      body: levelController.obx(
+        (state) => GridView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          itemCount: levelController.listMatiere.length,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 10,
+            crossAxisSpacing: 10,
+          ),
+          itemBuilder: (context, index) => Obx(
+            () => BuildMatiere(
+              onTap: () {
+                testController.createRewardedLoad();
+                Get.to(
+                  () => PageMatiere(
+                    url: widget.level.name + '-' + state[index].name,
                   ),
-                ),
+                );
+              },
+              matiere: Matiere(
+                  name: state[index].name,
+                  epreuves: state[index].epreuves,
+                  image: state[index].image),
+            ),
+          ),
+        ),
+        onLoading: Center(
+          child: CircularProgressIndicator(),
+        ),
+        onEmpty: Center(
+          child: Text(
+            'Oups,Aucune matières disponibles pour cette classe ',
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+            ),
+          ),
+        ),
+        onError: (error) => Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              error,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            IconButton(
+              onPressed: () {
+                levelController.getLevelMatieres(
+                    collectionName: widget.level.name);
+              },
+              icon: Icon(
+                Icons.restart_alt,
+                color: Theme.of(context).primaryColor,
+                size: 28,
+              ),
+            ),
+          ],
               ),
       ),
     );

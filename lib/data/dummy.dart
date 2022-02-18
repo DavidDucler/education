@@ -10,8 +10,8 @@ class Dummy {
   ];
   static const List<String> wizard_brief = [
     // "Choose your destination, plan Your trip. Pick the best place for Your holiday",
-    "Retrouvez-sur Educamer les épreuves des plus collèges et lycées du cameroun",
-    "Vous avez des difficultés,desormais Sur Educamer vous disposez des enseignants qualifiés, faites votre choix",
+    "Retrouvez-sur SujetCam les épreuves des plus grands collèges et lycées du cameroun",
+    "Vous avez des difficultés,desormais Sur SujetCam vous disposez des enseignants qualifiés, faites votre choix",
     "Profitez des notifactions instantanées",
   ];
   static const List<String> wizard_image = [
